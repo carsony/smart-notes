@@ -1,45 +1,79 @@
 import * as path from "node:path";
-import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
-import { FastifyPluginAsync } from "fastify";
+import AutoLoad from "@fastify/autoload";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export type AppOptions = {
-  // Place your custom options for app below here.
-} & Partial<AutoloadPluginOptions>;
+export const options = {
+  ajv: {
+    customOptions: {
+      removeAdditional: "all",
+    },
+  },
+};
 
-// Pass --options via CLI arguments in command to enable these options.
-const options: AppOptions = {};
+export default async function app(
+  fastify: FastifyInstance,
+  opts: FastifyPluginOptions
+) {
+  delete opts.skipOverride; // This option only serves testing purpose
 
-const app: FastifyPluginAsync<AppOptions> = async (
-  fastify,
-  opts
-): Promise<void> => {
-  // Place here your custom code!
-
-  // Do not touch the following lines
-
-  // This loads all plugins defined in plugins
-  // those should be support plugins that are reused
-  // through your application
-  // eslint-disable-next-line no-void
-  fastify.register(AutoLoad, {
-    dir: path.join(__dirname, "plugins"),
+  await fastify.register(AutoLoad, {
+    dir: path.join(__dirname, "plugins/external"),
     options: opts,
     forceESM: true,
   });
 
-  // This loads all plugins defined in routes
-  // define your routes in one of these
-  // eslint-disable-next-line no-void
-  void fastify.register(AutoLoad, {
+  fastify.register(AutoLoad, {
     dir: path.join(__dirname, "routes"),
     options: opts,
     forceESM: true,
   });
-};
 
-export default app;
-export { app, options };
+  fastify.setErrorHandler((err, request, reply) => {
+    fastify.log.error(
+      {
+        err,
+        request: {
+          method: request.method,
+          url: request.url,
+          query: request.query,
+          params: request.params,
+        },
+      },
+      "Unhandled error occurred"
+    );
+
+    reply.code(err.statusCode ?? 500);
+
+    return err.statusCode && err.statusCode < 500
+      ? { message: err.message }
+      : { message: "Internal Server Error" };
+  });
+
+  fastify.setNotFoundHandler(
+    {
+      preHandler: fastify.rateLimit({
+        max: 3,
+        timeWindow: 500,
+      }),
+    },
+    (request, reply) => {
+      request.log.warn(
+        {
+          request: {
+            method: request.method,
+            url: request.url,
+            query: request.query,
+            params: request.params,
+          },
+        },
+        "Resource not found"
+      );
+
+      reply.code(404).send({ message: "Not Found" });
+    }
+  );
+}

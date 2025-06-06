@@ -5,6 +5,9 @@ export default fp(
   async (server) => {
     server.register(fastifySecureSession, {
       key: server.config.COOKIE_SECRET,
+      cookie: {
+        path: "/",
+      },
     });
   },
   {

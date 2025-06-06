@@ -8,6 +8,9 @@ declare module "fastify" {
       POSTGRES_DB: string;
       POSTGRES_USER: string;
       POSTGRES_PASSWORD: string;
+      GOOGLE_CLIENT_ID: string;
+      GOOGLE_CLIENT_SECRET: string;
+      GOOGLE_CALLBACK_URL: string;
       COOKIE_SECRET: string;
       COOKIE_NAME: string;
       COOKIE_SECURED: boolean;
@@ -27,6 +30,9 @@ const schema = {
     "POSTGRES_DB",
     "POSTGRES_USER",
     "POSTGRES_PASSWORD",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GOOGLE_CALLBACK_URL",
     "COOKIE_SECRET",
     "COOKIE_NAME",
     "COOKIE_SECURED",
@@ -48,6 +54,15 @@ const schema = {
       type: "string",
     },
     POSTGRES_PASSWORD: {
+      type: "string",
+    },
+    GOOGLE_CLIENT_ID: {
+      type: "string",
+    },
+    GOOGLE_CLIENT_SECRET: {
+      type: "string",
+    },
+    GOOGLE_CALLBACK_URL: {
       type: "string",
     },
     COOKIE_SECRET: {

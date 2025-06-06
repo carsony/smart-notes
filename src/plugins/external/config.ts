@@ -1,10 +1,13 @@
-import fp from "fastify-plugin";
 import env from "@fastify/env";
-import { FastifyInstance } from "fastify";
 
 declare module "fastify" {
   export interface FastifyInstance {
     config: {
+      POSTGRES_HOST: string;
+      POSTGRES_PORT: number;
+      POSTGRES_DB: string;
+      POSTGRES_USER: string;
+      POSTGRES_PASSWORD: string;
       COOKIE_SECRET: string;
       COOKIE_NAME: string;
       COOKIE_SECURED: boolean;
@@ -19,6 +22,11 @@ declare module "fastify" {
 const schema = {
   type: "object",
   required: [
+    "POSTGRES_HOST",
+    "POSTGRES_PORT",
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
     "COOKIE_SECRET",
     "COOKIE_NAME",
     "COOKIE_SECURED",
@@ -26,7 +34,22 @@ const schema = {
     "LOG_LEVEL",
   ],
   properties: {
-    // Security
+    POSTGRES_HOST: {
+      type: "string",
+    },
+    POSTGRES_PORT: {
+      type: "number",
+      default: 5432,
+    },
+    POSTGRES_DB: {
+      type: "string",
+    },
+    POSTGRES_USER: {
+      type: "string",
+    },
+    POSTGRES_PASSWORD: {
+      type: "string",
+    },
     COOKIE_SECRET: {
       type: "string",
     },
@@ -56,7 +79,7 @@ const schema = {
   },
 };
 
-export const options = {
+export const autoConfig = {
   // Decorate Fastify instance with `config` key
   // Optional, default: 'config'
   confKey: "config",
@@ -69,9 +92,4 @@ export const options = {
   encapsulate: false,
 };
 
-export default fp(
-  async (server: FastifyInstance) => {
-    server.register(env, options);
-  },
-  { name: "config" }
-);
+export default env;

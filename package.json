@@ -13,7 +13,9 @@
     "watch": "tsc -w",
     "dev": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch\" \"npm:dev:start\"",
     "dev:start": "npm run build && fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js",
-    "test": "npm run build:ts && tsc -p test/tsconfig.json && FASTIFY_AUTOLOAD_TYPESCRIPT=1 node --test --experimental-test-coverage --loader ts-node/esm test/**/*.ts"
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +32,8 @@
     "@fastify/secure-session": "^8.2.0",
     "@fastify/sensible": "^6.0.3",
     "@fastify/session": "^11.1.0",
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "@fastify/type-provider-typebox": "^5.1.0",
     "@fastify/under-pressure": "^9.0.3",
     "@sinclair/typebox": "^0.34.33",
@@ -42,7 +46,10 @@
     "c8": "^10.1.3",
     "concurrently": "^9.1.2",
     "fastify-tsconfig": "^3.0.0",
+    "glob": "^11.0.2",
     "tsx": "^4.19.4",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.2"
   }
 }

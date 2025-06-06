@@ -55,10 +55,7 @@ export default async function app(
 
   fastify.setNotFoundHandler(
     {
-      preHandler: fastify.rateLimit({
-        max: 3,
-        timeWindow: 500,
-      }),
+      preHandler: fastify.rateLimit(),
     },
     (request, reply) => {
       request.log.warn(
@@ -72,7 +69,7 @@ export default async function app(
         },
         "Resource not found"
       );
-
+      
       reply.code(404).send({ message: "Not Found" });
     }
   );

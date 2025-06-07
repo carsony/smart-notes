@@ -11,7 +11,9 @@ const plugin: FastifyPluginAsync = async (server) => {
         done();
       },
     },
-    async () => "protected"
+    async (req, res) => {
+      return { message: "protected" };
+    }
   );
 };
 

@@ -3,6 +3,7 @@ import env from "@fastify/env";
 declare module "fastify" {
   export interface FastifyInstance {
     config: {
+      CLIENT_URL: string;
       POSTGRES_HOST: string;
       POSTGRES_PORT: number;
       POSTGRES_DB: string;
@@ -25,6 +26,7 @@ declare module "fastify" {
 const schema = {
   type: "object",
   required: [
+    "CLIENT_URL",
     "POSTGRES_HOST",
     "POSTGRES_PORT",
     "POSTGRES_DB",
@@ -40,6 +42,9 @@ const schema = {
     "LOG_LEVEL",
   ],
   properties: {
+    CLIENT_URL: {
+      type: "string",
+    },
     POSTGRES_HOST: {
       type: "string",
     },

@@ -16,12 +16,20 @@ const plugin: FastifyPluginAsync = async (server) => {
     {
       preValidation: passport.authenticate("google", {
         authInfo: false,
-        successRedirect: "/api/protected",
         scope: ["profile", "email"],
       }),
     },
-    async () => {}
+    async (_req, res) => {
+      res.redirect(`${server.config.CLIENT_URL}/login/success`);
+    }
   );
+
+  server.get("/user", async (req, res) => {
+    if (!req.user) {
+      return res.code(401);
+    }
+    return { user: req.user };
+  });
 };
 
 export default plugin;

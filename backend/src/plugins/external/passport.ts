@@ -20,8 +20,8 @@ export const autoConfig = (server: FastifyInstance) => {
   };
 };
 
-export default fp(
-  async (server, opts: StrategyOptions) => {
+export default fp<StrategyOptions>(
+  async (server, opts) => {
     const fastifyPassport = new Authenticator();
 
     server.register(fastifyPassport.initialize());

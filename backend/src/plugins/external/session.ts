@@ -7,10 +7,9 @@ export default fp(
       key: server.config.COOKIE_SECRET,
       cookie: {
         path: "/",
+        httpOnly: true,
       },
     });
   },
-  {
-    name: "session",
-  }
+  { name: "session" }
 );

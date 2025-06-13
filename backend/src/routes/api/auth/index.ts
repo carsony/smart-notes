@@ -24,10 +24,7 @@ const plugin: FastifyPluginAsync = async (server) => {
     }
   );
 
-  server.get("/user", async (req, res) => {
-    if (!req.user) {
-      return res.code(401);
-    }
+  server.get("/user", async (req, _res) => {
     return { user: req.user };
   });
 };

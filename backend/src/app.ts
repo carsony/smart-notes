@@ -29,6 +29,8 @@ export default async function app(
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, "routes"),
     options: opts,
+    autoHooks: true,
+    cascadeHooks: true,
     forceESM: true,
   });
 

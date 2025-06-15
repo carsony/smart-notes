@@ -71,8 +71,12 @@ export default async function app(
         },
         "Resource not found"
       );
-      
+
       reply.code(404).send({ message: "Not Found" });
     }
   );
+
+  fastify.addHook("onReady", () => {
+    fastify.swagger();
+  });
 }

@@ -15,5 +15,9 @@
       "@/*": ["./src/*"]
     }
   },
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true
+  },
   "include": ["@types", "src/**/*.ts"]
 }

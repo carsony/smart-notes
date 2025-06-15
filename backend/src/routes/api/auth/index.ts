@@ -1,6 +1,7 @@
-import { FastifyPluginAsync } from "fastify";
+import { UserSchema } from "@/types/auth.js";
+import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 
-const plugin: FastifyPluginAsync = async (server) => {
+const plugin: FastifyPluginAsyncTypebox = async (server) => {
   const { passport } = server;
 
   server.get(
@@ -24,9 +25,22 @@ const plugin: FastifyPluginAsync = async (server) => {
     }
   );
 
-  server.get("/user", async (req, _res) => {
-    return { user: req.user };
-  });
+  server.get(
+    "/user",
+    {
+      schema: {
+        description: "Get current user",
+        response: {
+          200: UserSchema,
+        },
+      },
+    },
+    async (req, _res) => {
+      if (req.user) {
+        return req.user;
+      }
+    }
+  );
 };
 
 export default plugin;

@@ -2,14 +2,18 @@ import fp from "fastify-plugin";
 import { FastifyInstance } from "fastify";
 import { Authenticator } from "@fastify/passport";
 import {
+  type Profile as GoogleProfile,
   Strategy as GoogleStrategy,
   StrategyOptions,
 } from "passport-google-oauth20";
+import { User } from "@/types/auth.js";
 
 declare module "fastify" {
-  export interface FastifyInstance {
+  interface FastifyInstance {
     passport: Authenticator;
   }
+
+  interface PassportUser extends User {}
 }
 
 export const autoConfig = (server: FastifyInstance) => {
@@ -34,13 +38,16 @@ export default fp<StrategyOptions>(
       })
     );
 
-    fastifyPassport.registerUserDeserializer(async (user, req) => {
+    fastifyPassport.registerUserDeserializer(async (user: User, req) => {
       return user;
     });
 
-    fastifyPassport.registerUserSerializer(async (user, req) => {
-      return user;
-    });
+    fastifyPassport.registerUserSerializer<GoogleProfile, User>(
+      async (user, _req) => {
+        const { id, emails, displayName } = user;
+        return { id, displayName, email: emails?.[0]?.value ?? null };
+      }
+    );
 
     server.decorate("passport", fastifyPassport);
   },

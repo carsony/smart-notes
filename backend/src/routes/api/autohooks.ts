@@ -1,16 +1,16 @@
 import { FastifyInstance } from "fastify";
 
-export default async function (server: FastifyInstance) {
-  server.addHook("preValidation", async (req, res) => {
+export default async function (fastify: FastifyInstance) {
+  fastify.addHook("preValidation", async (request, reply) => {
     if (
-      req.url.startsWith("/api/auth/login") ||
-      req.url.startsWith("/api/auth/google/callback")
+      request.url.startsWith("/api/auth/login") ||
+      request.url.startsWith("/api/auth/google/callback")
     ) {
       return;
     }
 
-    if (!req.isAuthenticated()) {
-      res.unauthorized();
+    if (!request.isAuthenticated()) {
+      reply.unauthorized();
     }
   });
 }

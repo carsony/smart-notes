@@ -1,7 +1,7 @@
 import fp from "fastify-plugin";
 import { FastifyInstance } from "fastify";
 import { Kysely, PostgresDialect } from "kysely";
-import { Pool } from "pg";
+import { Pool, PoolConfig } from "pg";
 import { Database } from "@/types/database.js";
 
 declare module "fastify" {
@@ -10,26 +10,26 @@ declare module "fastify" {
   }
 }
 
-export const autoConfig = (server: FastifyInstance) => {
+export const autoConfig = (fastify: FastifyInstance) => {
   return {
-    database: server.config.POSTGRES_DB,
-    host: server.config.POSTGRES_HOST,
-    port: server.config.POSTGRES_PORT,
-    user: server.config.POSTGRES_USER,
+    database: fastify.config.POSTGRES_DB,
+    host: fastify.config.POSTGRES_HOST,
+    port: fastify.config.POSTGRES_PORT,
+    user: fastify.config.POSTGRES_USER,
     max: 10,
   };
 };
 
-export default fp(
-  async (server: FastifyInstance, opts) => {
+export default fp<PoolConfig>(
+  async (fastify: FastifyInstance, opts) => {
     const dialect = new PostgresDialect({
       pool: new Pool(opts),
     });
 
     const db = new Kysely<Database>({ dialect });
-    server.decorate("db", db);
+    fastify.decorate("db", db);
 
-    server.addHook("onClose", async (instance) => {
+    fastify.addHook("onClose", async (instance) => {
       await instance.db.destroy();
     });
   },

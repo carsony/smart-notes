@@ -1,17 +1,17 @@
 import { FastifyPluginAsync } from "fastify";
 
-const plugin: FastifyPluginAsync = async (server) => {
-  server.get(
+const plugin: FastifyPluginAsync = async (fastify) => {
+  fastify.get(
     "/",
     {
-      preValidation: (req, res, done) => {
-        if (!req.isAuthenticated()) {
-          return res.redirect("/api/auth/login");
+      preValidation: (request, reply, done) => {
+        if (!request.isAuthenticated()) {
+          return reply.redirect("/api/auth/login");
         }
         done();
       },
     },
-    async (req, res) => {
+    async (request, reply) => {
       return { message: "protected" };
     }
   );

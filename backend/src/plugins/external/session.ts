@@ -2,9 +2,9 @@ import fp from "fastify-plugin";
 import fastifySecureSession from "@fastify/secure-session";
 
 export default fp(
-  async (server) => {
-    server.register(fastifySecureSession, {
-      key: server.config.COOKIE_SECRET,
+  async (fastify) => {
+    fastify.register(fastifySecureSession, {
+      key: fastify.config.COOKIE_SECRET,
       cookie: {
         path: "/",
         httpOnly: true,

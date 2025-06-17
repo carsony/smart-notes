@@ -2,12 +2,12 @@
 import { UserSchema } from "@/types/auth.js";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 
-const plugin: FastifyPluginAsyncTypebox = async (server) => {
-  const { passport } = server;
+const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
+  const { passport } = fastify;
 
-  server.addSchema(UserSchema);
+  fastify.addSchema(UserSchema);
 
-  server.get(
+  fastify.get(
     "/login",
     passport.authenticate("google", {
       authInfo: false,
@@ -15,7 +15,7 @@ const plugin: FastifyPluginAsyncTypebox = async (server) => {
     })
   );
 
-  server.get(
+  fastify.get(
     "/google/callback",
     {
       preValidation: passport.authenticate("google", {
@@ -23,12 +23,12 @@ const plugin: FastifyPluginAsyncTypebox = async (server) => {
         scope: ["profile", "email"],
       }),
     },
-    async (_req, res) => {
-      res.redirect(`${server.config.CLIENT_URL}/login/success`);
+    async (_request, reply) => {
+      reply.redirect(`${fastify.config.CLIENT_URL}/login/success`);
     }
   );
 
-  server.get(
+  fastify.get(
     "/user",
     {
       schema: {
@@ -40,9 +40,9 @@ const plugin: FastifyPluginAsyncTypebox = async (server) => {
         },
       },
     },
-    async (req, res) => {
-      if (req.user) {
-        return req.user;
+    async (request, reply) => {
+      if (request.user) {
+        return request.user;
       }
     }
   );

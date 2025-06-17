@@ -10,5 +10,5 @@ export const IdSchema = Type.String({ maxLength: 255 });
 
 export const StringSchema = Type.String({
   minLength: 1,
-  maxLength: 255
-})
+  maxLength: 255,
+});

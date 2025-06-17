@@ -16,20 +16,20 @@ declare module "fastify" {
   interface PassportUser extends User {}
 }
 
-export const autoConfig = (server: FastifyInstance) => {
+export const autoConfig = (fastify: FastifyInstance) => {
   return {
-    clientID: server.config.GOOGLE_CLIENT_ID,
-    clientSecret: server.config.GOOGLE_CLIENT_SECRET,
-    callbackURL: server.config.GOOGLE_CALLBACK_URL,
+    clientID: fastify.config.GOOGLE_CLIENT_ID,
+    clientSecret: fastify.config.GOOGLE_CLIENT_SECRET,
+    callbackURL: fastify.config.GOOGLE_CALLBACK_URL,
   };
 };
 
 export default fp<StrategyOptions>(
-  async (server, opts) => {
+  async (fastify, opts) => {
     const fastifyPassport = new Authenticator();
 
-    server.register(fastifyPassport.initialize());
-    server.register(fastifyPassport.secureSession());
+    fastify.register(fastifyPassport.initialize());
+    fastify.register(fastifyPassport.secureSession());
 
     fastifyPassport.use(
       "google",
@@ -38,18 +38,18 @@ export default fp<StrategyOptions>(
       })
     );
 
-    fastifyPassport.registerUserDeserializer(async (user: User, req) => {
+    fastifyPassport.registerUserDeserializer(async (user: User, _request) => {
       return user;
     });
 
     fastifyPassport.registerUserSerializer<GoogleProfile, User>(
-      async (user, _req) => {
+      async (user, _request) => {
         const { id, emails, displayName } = user;
         return { id, displayName, email: emails?.[0]?.value ?? "" };
       }
     );
 
-    server.decorate("passport", fastifyPassport);
+    fastify.decorate("passport", fastifyPassport);
   },
   { name: "passport", dependencies: ["session"] }
 );

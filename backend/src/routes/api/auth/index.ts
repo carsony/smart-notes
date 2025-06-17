@@ -1,5 +1,4 @@
-// import { UserSchema } from "@/types/auth.js";
-import { UserSchema } from "@/types/auth.js";
+import { UserSchema } from "@/schemas/auth.js";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -40,7 +39,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         },
       },
     },
-    async (request, reply) => {
+    async (request, _reply) => {
       if (request.user) {
         return request.user;
       }

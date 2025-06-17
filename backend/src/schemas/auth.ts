@@ -8,7 +8,7 @@ export interface Email {
 export const UserSchema = Type.Object(
   {
     id: IdSchema,
-    displayName: StringSchema,
+    name: StringSchema,
     email: EmailSchema,
   },
   { $id: "User" }

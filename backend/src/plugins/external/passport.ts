@@ -45,7 +45,7 @@ export default fp<StrategyOptions>(
     fastifyPassport.registerUserSerializer<GoogleProfile, User>(
       async (user, _req) => {
         const { id, emails, displayName } = user;
-        return { id, displayName, email: emails?.[0]?.value ?? null };
+        return { id, displayName, email: emails?.[0]?.value ?? "" };
       }
     );
 

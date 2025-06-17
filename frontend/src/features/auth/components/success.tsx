@@ -1,10 +1,9 @@
-import { useUser } from "../api/get-user";
+import { useGetUser } from "@/api/auth";
 
 export function Success() {
-  const userQuery = useUser();
-  const user = userQuery.data;
+  const userQuery = useGetUser();
 
-  if (!user) return null;
+  console.log(userQuery.data)
 
   return <div>Logged In</div>;
 }

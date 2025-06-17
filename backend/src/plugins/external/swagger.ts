@@ -3,14 +3,21 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import fastifySwagger from "@fastify/swagger";
 
 export default fp(async function (fastify) {
+  // @ts-ignore
   await fastify.register(fastifySwagger, {
+    hideUntagged: true,
     openapi: {
       info: {
         title: "Swagger API Test",
         description: "Testing the Fastify swagger API",
         version: "0.0.0",
       },
-      tags: [{ name: "user", description: "User related end-points" }],
+      tags: [{ name: "auth", description: "Auth related end-points" }],
+    },
+    refResolver: {
+      buildLocalReference(json, _baseUri, _fragment, i) {
+        return json.$id || `my-fragment-${i}`;
+      },
     },
   });
 

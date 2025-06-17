@@ -5,10 +5,13 @@ export interface Email {
   value: string;
 }
 
-export const UserSchema = Type.Object({
-  id: IdSchema,
-  displayName: StringSchema,
-  email: Type.Union([EmailSchema, Type.Null()]),
-});
+export const UserSchema = Type.Object(
+  {
+    id: IdSchema,
+    displayName: StringSchema,
+    email: EmailSchema,
+  },
+  { $id: "User" }
+);
 
 export type User = Static<typeof UserSchema>;

@@ -10,7 +10,7 @@ interface LoginFormProps extends React.ComponentProps<"div"> {
 
 export function LoginForm({ className, ...props }: LoginFormProps) {
   const handleLogin = () => {
-    window.open(`${import.meta.env.VITE_API_URL}/auth/login`, "_self");
+    window.open(`${import.meta.env.VITE_API_URL}api/auth/login`, "_self");
   };
 
   return (

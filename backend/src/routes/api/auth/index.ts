@@ -1,8 +1,11 @@
+// import { UserSchema } from "@/types/auth.js";
 import { UserSchema } from "@/types/auth.js";
 import { FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox";
 
 const plugin: FastifyPluginAsyncTypebox = async (server) => {
   const { passport } = server;
+
+  server.addSchema(UserSchema);
 
   server.get(
     "/login",
@@ -30,12 +33,14 @@ const plugin: FastifyPluginAsyncTypebox = async (server) => {
     {
       schema: {
         description: "Get current user",
+        tags: ["auth"],
+        operationId: "getUser",
         response: {
-          200: UserSchema,
+          "2XX": { $ref: "User" },
         },
       },
     },
-    async (req, _res) => {
+    async (req, res) => {
       if (req.user) {
         return req.user;
       }

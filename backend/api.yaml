@@ -1,0 +1,44 @@
+openapi: 3.0.3
+info:
+  title: Swagger API Test
+  description: Testing the Fastify swagger API
+  version: 0.0.0
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          maxLength: 255
+          type: string
+        displayName:
+          minLength: 1
+          maxLength: 255
+          type: string
+        email:
+          format: email
+          minLength: 1
+          maxLength: 255
+          type: string
+      required:
+        - id
+        - displayName
+        - email
+paths:
+  /api/auth/user:
+    get:
+      operationId: getUser
+      tags:
+        - auth
+      description: Get current user
+      responses:
+        2XX:
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+tags:
+  - name: auth
+    description: Auth related end-points
+

@@ -12,8 +12,7 @@ export const customInstance = <T>(
     ...config,
     ...options,
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  }).then(({ data }) => data);
+  }).then(({ data }) => data as T);
   return promise;
 };
 
@@ -29,8 +28,7 @@ api.interceptors.response.use(
     console.error("Axios error:", error);
 
     if (error.response?.status === 401) {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      window.location.href = `${process.env.VITE_API_URL}/api/auth/login`;
+      window.location.href = `${process.env.VITE_API_URL ?? ""}/api/auth/login`;
     }
 
     return Promise.reject(error);

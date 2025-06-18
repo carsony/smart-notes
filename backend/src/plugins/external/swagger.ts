@@ -8,8 +8,8 @@ export default fp(async function (fastify) {
     hideUntagged: true,
     openapi: {
       info: {
-        title: "Swagger API Test",
-        description: "Testing the Fastify swagger API",
+        title: "Smart Notes",
+        description: "API for Smart Notes",
         version: "0.0.0",
       },
       tags: [{ name: "auth", description: "Auth related end-points" }],

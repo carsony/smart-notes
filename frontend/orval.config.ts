@@ -9,7 +9,6 @@ export default defineConfig({
       mode: "tags",
       target: "src/api/default.ts",
       schemas: "src/types/api",
-      client: "react-query",
       prettier: true,
       override: {
         mutator: {

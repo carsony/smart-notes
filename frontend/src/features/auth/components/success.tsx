@@ -1,7 +1,7 @@
-import { useGetUser } from "@/api/auth";
+import { useUser } from "../api/get-user";
 
 export function Success() {
-  const userQuery = useGetUser();
+  const userQuery = useUser();
 
   console.log(userQuery.data)
 

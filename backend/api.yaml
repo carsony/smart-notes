@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Swagger API Test
-  description: Testing the Fastify swagger API
+  title: Smart Notes
+  description: API for Smart Notes
   version: 0.0.0
 components:
   schemas:
@@ -11,7 +11,7 @@ components:
         id:
           maxLength: 255
           type: string
-        displayName:
+        name:
           minLength: 1
           maxLength: 255
           type: string
@@ -22,7 +22,7 @@ components:
           type: string
       required:
         - id
-        - displayName
+        - name
         - email
 paths:
   /api/auth/user:
